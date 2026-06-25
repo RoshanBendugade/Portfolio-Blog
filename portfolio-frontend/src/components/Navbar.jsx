@@ -1,18 +1,31 @@
-import { Link } from "react-router-dom";
-
 function Navbar() {
   return (
-    <nav
-      style={{
-        padding: "20px",
-        backgroundColor: "#f5f5f5",
-      }}
-    >
-      <Link to="/">Home</Link>{" "}
-      |{" "}
-      <Link to="/projects">Projects</Link>{" "}
-      |{" "}
-      <Link to="/blogs">Blogs</Link>
+    <nav className="fixed top-0 w-full bg-slate-900 text-white shadow-lg z-50">
+
+      <div className="max-w-7xl mx-auto flex justify-between items-center p-5">
+
+        <h1 className="text-2xl font-bold">
+          Roshan Portfolio
+        </h1>
+
+        <div className="flex gap-8">
+
+          <a href="#home">Home</a>
+
+          <a href="#about">About</a>
+
+          <a href="#skills">Skills</a>
+
+          <a href="#projects">Projects</a>
+
+          <a href="#blogs">Blogs</a>
+
+          <a href="#contact">Contact</a>
+
+        </div>
+
+      </div>
+
     </nav>
   );
 }

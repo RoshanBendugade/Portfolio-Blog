@@ -1,36 +1,35 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from "react-router-dom";
-
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import Projects from "./pages/Projects";
-import Blogs from "./pages/Blogs";
+
+import Hero from "./components/Hero";
+import About from "./components/About";
+import Skills from "./components/Skills";
+
+import Projects from "./components/Projects";
+import Blogs from "./components/Blogs";
+import Contact from "./components/Contact";
+import Footer from "./components/Footer";
 
 function App() {
   return (
-    <BrowserRouter>
+    <div className="bg-slate-950 text-white">
+
       <Navbar />
 
-      <Routes>
-        <Route
-          path="/"
-          element={<Home />}
-        />
+      <Hero />
 
-        <Route
-          path="/projects"
-          element={<Projects />}
-        />
+      <About />
 
-        <Route
-          path="/blogs"
-          element={<Blogs />}
-        />
-      </Routes>
-    </BrowserRouter>
+      <Skills />
+
+      <Projects />
+
+      <Blogs />
+
+      <Contact />
+
+      <Footer />
+
+    </div>
   );
 }
 
