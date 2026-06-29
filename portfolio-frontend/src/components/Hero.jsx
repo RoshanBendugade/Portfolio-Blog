@@ -116,7 +116,6 @@ function Hero() {
                 alt="Profile"
                 className="relative w-80 md:w-96 rounded-3xl border-4 border-slate-700 shadow-2xl"
               />
-
             </div>
 
           </div>

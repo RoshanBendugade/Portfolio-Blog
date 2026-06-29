@@ -36,6 +36,9 @@ public class ProjectService {
         project.setDescription(updatedProject.getDescription());
         project.setGithubUrl(updatedProject.getGithubUrl());
         project.setLiveUrl(updatedProject.getLiveUrl());
+        project.setImageUrl(updatedProject.getImageUrl());
+        project.setTechnologies(updatedProject.getTechnologies());
+        project.setFeatured(updatedProject.getFeatured());
 
         return repository.save(project);
     }

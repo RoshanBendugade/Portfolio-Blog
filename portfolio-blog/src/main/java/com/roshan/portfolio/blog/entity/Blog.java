@@ -18,4 +18,9 @@ public class Blog {
     private String content;
 
     private String author;
+
+    private String imageUrl;
+    private String category;
+    private Integer readTime;
+    private Boolean featured;
 }

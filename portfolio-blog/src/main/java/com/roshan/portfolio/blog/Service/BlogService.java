@@ -34,7 +34,11 @@ public class BlogService {
 
         blog.setTitle(updatedBlog.getTitle());
         blog.setContent(updatedBlog.getContent());
-        blog.setAuthor(updatedBlog.getAuthor());
+        blog.setImageUrl(updatedBlog.getImageUrl());
+        blog.setCategory(updatedBlog.getCategory());
+        blog.setReadTime(updatedBlog.getReadTime());
+        blog.setFeatured(updatedBlog.getFeatured());
+
 
         return repository.save(blog);
     }
