@@ -16,7 +16,13 @@ public class Project {
 
     private String description;
 
+    private String imageUrl;
+
     private String githubUrl;
 
     private String liveUrl;
+
+    private String technologies;
+
+    private Boolean featured;
 }
