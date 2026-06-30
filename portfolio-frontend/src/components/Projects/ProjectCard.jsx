@@ -1,198 +1,74 @@
-import {
-  FaGithub,
-  FaExternalLinkAlt,
-  FaEdit,
-  FaTrash,
-} from "react-icons/fa";
+import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 
 function ProjectCard({
-  project,
-  onEdit,
-  onDelete,
+  image,
+  title,
+  description,
+  technologies,
+  github,
+  live,
 }) {
   return (
-    <div
-      className="
-      bg-white
-      dark:bg-slate-800
-      rounded-2xl
-      overflow-hidden
-      shadow-lg
-      hover:shadow-2xl
-      hover:-translate-y-2
-      transition-all
-      duration-300
-      "
-    >
-      {/* Project Image */}
+    <div className="group overflow-hidden rounded-3xl bg-white dark:bg-slate-900 shadow-lg hover:shadow-orange-500/20 transition-all duration-500 hover:-translate-y-3">
 
-      <div className="relative">
+      {/* Image */}
 
+      <div className="overflow-hidden h-60">
         <img
-          src={
-            project.imageUrl ||
-            "https://picsum.photos/600/400"
-          }
-          alt={project.title}
-          className="
-          w-full
-          h-56
-          object-cover
-          hover:scale-105
-          transition-transform
-          duration-500
-          "
+          src={image}
+          alt={title}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
-
-        {project.featured && (
-          <span
-            className="
-            absolute
-            top-4
-            right-4
-            bg-orange-500
-            text-white
-            text-xs
-            font-semibold
-            px-3
-            py-1
-            rounded-full
-            "
-          >
-            ⭐ Featured
-          </span>
-        )}
-
       </div>
 
       {/* Content */}
 
       <div className="p-6">
 
-        <h2 className="text-2xl font-bold dark:text-white">
-          {project.title}
-        </h2>
+        <h3 className="text-2xl font-bold dark:text-white">
+          {title}
+        </h3>
 
-        <p className="mt-3 text-gray-600 dark:text-gray-300">
-          {project.description}
+        <p className="mt-4 text-gray-600 dark:text-gray-400 leading-7">
+          {description}
         </p>
 
         {/* Technologies */}
 
-        <div className="flex flex-wrap gap-2 mt-5">
-
-          {project.technologies &&
-            project.technologies
-              .split(",")
-              .map((tech, index) => (
-                <span
-                  key={index}
-                  className="
-                  bg-orange-100
-                  text-orange-600
-                  dark:bg-orange-500/20
-                  dark:text-orange-300
-                  px-3
-                  py-1
-                  rounded-full
-                  text-sm
-                  "
-                >
-                  {tech.trim()}
-                </span>
-              ))}
-
+        <div className="flex flex-wrap gap-2 mt-6">
+          {technologies.map((tech) => (
+            <span
+              key={tech}
+              className="px-3 py-1 rounded-full bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-300 text-sm"
+            >
+              {tech}
+            </span>
+          ))}
         </div>
 
         {/* Buttons */}
 
-        <div className="flex gap-3 mt-6">
+        <div className="flex gap-4 mt-8">
 
           <a
-            href={project.githubUrl}
+            href={github}
             target="_blank"
             rel="noreferrer"
-            className="
-            flex
-            items-center
-            gap-2
-            bg-gray-900
-            hover:bg-black
-            text-white
-            px-4
-            py-2
-            rounded-lg
-            transition
-            "
+            className="flex-1 flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl transition"
           >
             <FaGithub />
             GitHub
           </a>
 
           <a
-            href={project.liveUrl}
+            href={live}
             target="_blank"
             rel="noreferrer"
-            className="
-            flex
-            items-center
-            gap-2
-            bg-blue-600
-            hover:bg-blue-700
-            text-white
-            px-4
-            py-2
-            rounded-lg
-            transition
-            "
+            className="flex-1 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl transition"
           >
             <FaExternalLinkAlt />
             Live Demo
           </a>
-
-        </div>
-
-        {/* Edit Delete */}
-
-        <div className="flex gap-3 mt-6">
-
-          <button
-            onClick={() => onEdit(project)}
-            className="
-            flex
-            items-center
-            gap-2
-            bg-yellow-500
-            hover:bg-yellow-600
-            text-white
-            px-4
-            py-2
-            rounded-lg
-            transition
-            "
-          >
-            <FaEdit />
-            Edit
-          </button>
-
-          <button
-            onClick={() => onDelete(project.id)}
-            className="
-            flex
-            items-center
-            gap-2
-            bg-red-600
-            hover:bg-red-700
-            text-white
-            px-4
-            py-2
-            rounded-lg
-            transition
-            "
-          >
-            <FaTrash />
-            Delete
-          </button>
 
         </div>
 
