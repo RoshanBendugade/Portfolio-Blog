@@ -1,4 +1,4 @@
-package com.project.portfolio.blog;
+package com.roshan.portfolio.blog;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class ApplicationTests {
 
-	@Test
+	@org.testng.annotations.Test
 	void contextLoads() {
 	}
 
