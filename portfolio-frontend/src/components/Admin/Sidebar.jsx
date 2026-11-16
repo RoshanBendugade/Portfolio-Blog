@@ -26,25 +26,26 @@ function Sidebar({ isOpen, setIsOpen }) {
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-white
-      transform transition-transform duration-300
-      ${isOpen ? "translate-x-0" : "-translate-x-full"}
-      lg:translate-x-0 lg:static`}
+      className={`fixed inset-y-0 left-0 z-50 flex h-screen w-64 shrink-0 flex-col bg-slate-900 text-white shadow-xl transition-transform duration-300
+        ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        lg:sticky lg:top-0 lg:translate-x-0`}
     >
-      <div className="flex justify-between items-center p-6 border-b border-slate-700">
+      <div className="flex shrink-0 items-center justify-between border-b border-slate-700 p-5 sm:p-6">
         <h2 className="text-xl font-bold text-orange-500">
           Roshan Admin
         </h2>
 
         <button
+          type="button"
           onClick={() => setIsOpen(false)}
-          className="lg:hidden"
+          aria-label="Close sidebar"
+          className="rounded-lg p-2 text-slate-300 hover:bg-slate-800 lg:hidden"
         >
           <X size={22} />
         </button>
       </div>
 
-      <nav className="p-4 space-y-2">
+      <nav className="flex-1 space-y-2 overflow-y-auto p-4">
         {menuItems.map((item) => {
           const Icon = item.icon;
 
@@ -55,24 +56,25 @@ function Sidebar({ isOpen, setIsOpen }) {
               end={item.path === "/admin"}
               onClick={() => setIsOpen(false)}
               className={({ isActive }) =>
-                `flex items-center gap-3 p-3 rounded-lg transition ${
+                `flex items-center gap-3 rounded-lg p-3 transition ${
                   isActive
                     ? "bg-orange-500 text-white"
                     : "text-slate-300 hover:bg-slate-800"
                 }`
               }
             >
-              <Icon size={20} />
-              {item.name}
+              <Icon size={20} className="shrink-0" />
+              <span>{item.name}</span>
             </NavLink>
           );
         })}
       </nav>
 
-      <div className="absolute bottom-0 w-full p-4 border-t border-slate-700">
+      <div className="shrink-0 border-t border-slate-700 p-4">
         <button
+          type="button"
           onClick={handleLogout}
-          className="flex items-center gap-3 p-3 w-full rounded-lg text-red-400 hover:bg-slate-800"
+          className="flex w-full items-center gap-3 rounded-lg p-3 text-red-400 transition hover:bg-slate-800"
         >
           <LogOut size={20} />
           Logout

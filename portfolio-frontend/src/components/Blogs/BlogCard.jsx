@@ -1,46 +1,55 @@
-import { FaArrowRight } from "react-icons/fa";
 
 function BlogCard({
   image,
   title,
- description,
+  description,
   category,
-  date,
-  link,
+  author,
+  readTime,
 }) {
   return (
     <div className="group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-lg hover:shadow-orange-500/20 transition duration-500 hover:-translate-y-2">
 
+      {/* Blog Image */}
       <div className="overflow-hidden h-56">
         <img
-          src={image}
-          alt={title}
+          src={image || "/portfolio.png"}
+          alt={title || "Blog image"}
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = "/portfolio.png";
+          }}
           className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
         />
       </div>
 
       <div className="p-6">
 
-        <div className="flex justify-between text-sm text-orange-500">
-          <span>{category}</span>
-          <span>{date}</span>
+        {/* Category and Reading Time */}
+        <div className="flex justify-between items-center gap-2 text-sm text-orange-500">
+          <span>{category || "General"}</span>
+
+          {readTime && (
+            <span>{readTime} min read</span>
+          )}
         </div>
 
+        {/* Title */}
         <h3 className="mt-4 text-2xl font-bold dark:text-white">
           {title}
         </h3>
 
-        <p className="mt-4 text-gray-600 dark:text-gray-400 leading-7">
-          {description}
+        {/* Description */}
+        <p className="mt-4 text-gray-600 dark:text-gray-400 leading-7 line-clamp-4 whitespace-pre-line">
+          {description || "No description available."}
         </p>
 
-        <a
-          href={link}
-          className="inline-flex items-center gap-2 mt-6 text-orange-500 font-semibold hover:gap-3 transition-all"
-        >
-          Read More
-          <FaArrowRight />
-        </a>
+        {/* Author */}
+        {author && (
+          <p className="mt-6 text-sm text-gray-500 dark:text-gray-400">
+            Written by <span className="font-semibold text-orange-500">{author}</span>
+          </p>
+        )}
 
       </div>
     </div>

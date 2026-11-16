@@ -3,6 +3,8 @@ package com.roshan.portfolio.blog.Service;
 import com.roshan.portfolio.blog.Repository.BlogRepository;
 import com.roshan.portfolio.blog.entity.Blog;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -27,6 +29,11 @@ public class BlogService {
         repository.deleteById(id);
     }
 
+    public Page<Blog> getAllBlogs(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+
     public Blog updateBlog(Long id, Blog updatedBlog) {
 
         Blog blog = repository.findById(id)
@@ -34,12 +41,13 @@ public class BlogService {
 
         blog.setTitle(updatedBlog.getTitle());
         blog.setContent(updatedBlog.getContent());
+        blog.setAuthor(updatedBlog.getAuthor()); // Added
         blog.setImageUrl(updatedBlog.getImageUrl());
         blog.setCategory(updatedBlog.getCategory());
         blog.setReadTime(updatedBlog.getReadTime());
         blog.setFeatured(updatedBlog.getFeatured());
 
-
         return repository.save(blog);
     }
+
 }

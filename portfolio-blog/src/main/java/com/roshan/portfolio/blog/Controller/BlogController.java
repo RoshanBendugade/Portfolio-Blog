@@ -1,14 +1,22 @@
+
 package com.roshan.portfolio.blog.Controller;
 
 import com.roshan.portfolio.blog.Service.BlogService;
 import com.roshan.portfolio.blog.entity.Blog;
+import com.roshan.portfolio.blog.dto.response.BlogResponse;
+import com.roshan.portfolio.blog.mapper.BlogMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Sort;
+
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/blogs")
-@CrossOrigin(origins = "http://localhost:5173")
 public class BlogController {
 
     private final BlogService blogService;
@@ -18,25 +26,38 @@ public class BlogController {
     }
 
     @GetMapping
-    public List<Blog> getAllBlogs() {
-        return blogService.getAllBlogs();
+    public Page<BlogResponse> getAllBlogs(
+            @PageableDefault(
+                    size = 10,
+                    sort = "id",
+                    direction = Sort.Direction.DESC
+            ) Pageable pageable) {
+
+        return blogService.getAllBlogs(pageable)
+                .map(BlogMapper::toResponse);
     }
 
     @PostMapping
-    public Blog createBlog(@RequestBody Blog blog) {
-        return blogService.saveBlog(blog);
+    public BlogResponse createBlog(@RequestBody Blog blog) {
+
+        Blog savedBlog = blogService.saveBlog(blog);
+
+        return BlogMapper.toResponse(savedBlog);
     }
 
     @DeleteMapping("/{id}")
     public void deleteBlog(@PathVariable Long id) {
+
         blogService.deleteBlog(id);
     }
 
     @PutMapping("/{id}")
-    public Blog updateBlog(
+    public BlogResponse updateBlog(
             @PathVariable Long id,
             @RequestBody Blog blog) {
 
-        return blogService.updateBlog(id, blog);
+        Blog updatedBlog = blogService.updateBlog(id, blog);
+
+        return BlogMapper.toResponse(updatedBlog);
     }
 }

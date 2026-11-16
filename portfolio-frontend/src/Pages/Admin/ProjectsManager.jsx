@@ -1,5 +1,6 @@
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+
 import {
   Plus,
   Pencil,
@@ -12,6 +13,8 @@ import {
 } from "lucide-react";
 
 import api from "../../services/api";
+import PaginationControls from "../../components/ui/PaginationControls";
+import AdminTableState from "../../components/ui/AdminTableState";
 
 const emptyProject = {
   title: "",
@@ -26,39 +29,67 @@ const emptyProject = {
 function ProjectsManager() {
   const [projects, setProjects] = useState([]);
   const [formData, setFormData] = useState(emptyProject);
+
   const [editingId, setEditingId] = useState(null);
   const [showForm, setShowForm] = useState(false);
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
+
+  // Separate errors for loading and form/delete operations
+  const [loadError, setLoadError] = useState("");
   const [error, setError] = useState("");
 
-  // Fetch all projects
-  const fetchProjects = async () => {
+  // Pagination and sorting
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(5);
+  const [sort, setSort] = useState("id,desc");
+
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
+
+  // Fetch projects
+  const fetchProjects = useCallback(async () => {
     try {
       setLoading(true);
-      setError("");
+      setLoadError("");
 
-      const response = await api.get("/projects");
+      const response = await api.get("/projects", {
+        params: {
+          page,
+          size,
+          sort,
+        },
+      });
 
       const data = Array.isArray(response.data)
         ? response.data
-        : response.data?.content ||
-          response.data?.projects ||
-          response.data?.data ||
-          [];
+        : response.data?.content || [];
 
       setProjects(data);
+
+      setTotalPages(
+        response.data?.totalPages ?? (data.length > 0 ? 1 : 0)
+      );
+
+      setTotalElements(
+        response.data?.totalElements ?? data.length
+      );
     } catch (err) {
       console.error("Error fetching projects:", err);
-      setError("Unable to load projects. Please try again.");
+
+      setLoadError(
+        "Unable to load projects. Please check your connection and try again."
+      );
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, size, sort]);
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [fetchProjects]);
 
   // Handle form inputs
   const handleChange = (e) => {
@@ -73,7 +104,7 @@ function ProjectsManager() {
   // Open add form
   const openAddForm = () => {
     setEditingId(null);
-    setFormData(emptyProject);
+    setFormData({ ...emptyProject });
     setError("");
     setShowForm(true);
   };
@@ -119,10 +150,15 @@ function ProjectsManager() {
       }
 
       setShowForm(false);
-      setFormData(emptyProject);
+      setFormData({ ...emptyProject });
       setEditingId(null);
 
-      await fetchProjects();
+      // Refresh the table after saving
+      if (editingId === null && page !== 0) {
+        setPage(0);
+      } else {
+        await fetchProjects();
+      }
     } catch (err) {
       console.error("Error saving project:", err);
 
@@ -144,17 +180,36 @@ function ProjectsManager() {
     if (!confirmed) return;
 
     try {
+      setDeletingId(id);
       setError("");
 
       await api.delete(`/projects/${id}`);
 
-      setProjects((previous) =>
-        previous.filter((project) => project.id !== id)
-      );
+      // Move to previous page if the last item is deleted
+      if (projects.length === 1 && page > 0) {
+        setPage((previous) => previous - 1);
+      } else {
+        await fetchProjects();
+      }
     } catch (err) {
       console.error("Error deleting project:", err);
-      setError("Unable to delete project.");
+
+      setError("Unable to delete project. Please try again.");
+    } finally {
+      setDeletingId(null);
     }
+  };
+
+  // Change page size
+  const handleSizeChange = (newSize) => {
+    setSize(newSize);
+    setPage(0);
+  };
+
+  // Change sorting
+  const handleSortChange = (newSort) => {
+    setSort(newSort);
+    setPage(0);
   };
 
   return (
@@ -162,6 +217,7 @@ function ProjectsManager() {
 
       {/* Page Header */}
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
+
         <div>
           <h1 className="text-2xl font-bold text-gray-800">
             Project Management
@@ -173,27 +229,41 @@ function ProjectsManager() {
         </div>
 
         <div className="flex gap-2">
+
+          {/* Refresh Button */}
           <button
+            type="button"
             onClick={fetchProjects}
-            className="flex items-center gap-2 border px-4 py-2 rounded-lg hover:bg-gray-100"
+            disabled={loading}
+            className="flex items-center gap-2 border px-4 py-2 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <RefreshCw size={18} />
-            Refresh
+            <RefreshCw
+              size={18}
+              className={loading ? "animate-spin" : ""}
+            />
+
+            {loading ? "Refreshing..." : "Refresh"}
           </button>
 
+          {/* Add Project Button */}
           <button
+            type="button"
             onClick={openAddForm}
-            className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg"
+            className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors"
           >
             <Plus size={18} />
             Add Project
           </button>
+
         </div>
       </div>
 
-      {/* Error Message */}
+      {/* Form / Delete Error Message */}
       {error && (
-        <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-5">
+        <div
+          role="alert"
+          className="bg-red-100 text-red-700 p-3 rounded-lg mb-5"
+        >
           {error}
         </div>
       )}
@@ -203,17 +273,22 @@ function ProjectsManager() {
         <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
 
           <div className="flex justify-between items-center mb-5">
+
             <h2 className="text-xl font-semibold text-gray-800">
-              {editingId !== null ? "Edit Project" : "Add New Project"}
+              {editingId !== null
+                ? "Edit Project"
+                : "Add New Project"}
             </h2>
 
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="text-gray-500 hover:text-red-500"
+              disabled={saving}
+              className="text-gray-500 hover:text-red-500 disabled:opacity-50"
             >
               <X size={22} />
             </button>
+
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -332,8 +407,9 @@ function ProjectsManager() {
               </span>
             </label>
 
-            {/* Buttons */}
+            {/* Form Buttons */}
             <div className="flex flex-wrap gap-3">
+
               <button
                 type="submit"
                 disabled={saving}
@@ -349,10 +425,12 @@ function ProjectsManager() {
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
-                className="border px-6 py-3 rounded-lg hover:bg-gray-100"
+                disabled={saving}
+                className="border px-6 py-3 rounded-lg hover:bg-gray-100 disabled:opacity-50"
               >
                 Cancel
               </button>
+
             </div>
 
           </form>
@@ -375,29 +453,29 @@ function ProjectsManager() {
           </thead>
 
           <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan="5" className="p-8 text-center">
-                  Loading projects...
-                </td>
-              </tr>
-            ) : projects.length === 0 ? (
-              <tr>
-                <td colSpan="5" className="p-8 text-center text-gray-500">
-                  <FolderKanban
-                    className="mx-auto mb-2 text-gray-400"
-                    size={32}
-                  />
-                  No projects found. Click Add Project to create one.
-                </td>
-              </tr>
-            ) : (
+
+            {/* Loading, Error and Empty States */}
+            <AdminTableState
+              loading={loading}
+              error={loadError}
+              isEmpty={projects.length === 0}
+              onRetry={fetchProjects}
+              columns={5}
+              EmptyIcon={FolderKanban}
+              emptyTitle="No Projects Yet"
+              emptyDescription="You haven't added any projects. Click Add Project to showcase your work."
+            />
+
+            {/* Project Rows */}
+            {!loading &&
+              !loadError &&
               projects.map((project) => (
                 <tr
                   key={project.id}
                   className="border-b hover:bg-gray-50"
                 >
 
+                  {/* Project */}
                   <td className="p-4">
                     <div className="font-medium text-gray-800">
                       {project.title}
@@ -408,18 +486,22 @@ function ProjectsManager() {
                     </p>
                   </td>
 
+                  {/* Technologies */}
                   <td className="p-4 text-sm">
                     {Array.isArray(project.technologies)
                       ? project.technologies.join(", ")
                       : project.technologies || "-"}
                   </td>
 
+                  {/* Featured */}
                   <td className="p-4">
                     {project.featured ? "Yes" : "No"}
                   </td>
 
+                  {/* Links */}
                   <td className="p-4">
                     <div className="flex gap-3">
+
                       {project.githubUrl && (
                         <a
                           href={project.githubUrl}
@@ -443,38 +525,68 @@ function ProjectsManager() {
                           <ExternalLink size={19} />
                         </a>
                       )}
+
                     </div>
                   </td>
 
+                  {/* Actions */}
                   <td className="p-4">
                     <div className="flex gap-3">
 
                       <button
+                        type="button"
                         onClick={() => openEditForm(project)}
-                        className="text-blue-600 hover:text-blue-800"
+                        disabled={deletingId !== null}
+                        className="text-blue-600 hover:text-blue-800 disabled:opacity-40"
                         title="Edit project"
                       >
                         <Pencil size={18} />
                       </button>
 
                       <button
+                        type="button"
                         onClick={() => handleDelete(project.id)}
-                        className="text-red-600 hover:text-red-800"
+                        disabled={deletingId !== null}
+                        className="text-red-600 hover:text-red-800 disabled:opacity-40"
                         title="Delete project"
                       >
-                        <Trash2 size={18} />
+                        {deletingId === project.id ? (
+                          <RefreshCw
+                            size={18}
+                            className="animate-spin"
+                          />
+                        ) : (
+                          <Trash2 size={18} />
+                        )}
                       </button>
 
                     </div>
                   </td>
 
                 </tr>
-              ))
-            )}
-          </tbody>
+              ))}
 
+          </tbody>
         </table>
       </div>
+
+      {/* Pagination and Sorting */}
+      <PaginationControls
+        page={page}
+        totalPages={totalPages}
+        totalElements={totalElements}
+        size={size}
+        sort={sort}
+        onPageChange={setPage}
+        onSizeChange={handleSizeChange}
+        onSortChange={handleSortChange}
+        sortOptions={[
+          { value: "id,desc", label: "Newest first" },
+          { value: "id,asc", label: "Oldest first" },
+          { value: "title,asc", label: "Title A-Z" },
+          { value: "title,desc", label: "Title Z-A" },
+        ]}
+      />
 
     </div>
   );

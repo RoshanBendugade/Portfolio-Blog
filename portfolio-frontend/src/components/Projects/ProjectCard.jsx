@@ -46,31 +46,37 @@ function ProjectCard({
           ))}
         </div>
 
+
         {/* Buttons */}
 
         <div className="flex gap-4 mt-8">
 
-          <a
-            href={github}
-            target="_blank"
-            rel="noreferrer"
-            className="flex-1 flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl transition"
-          >
-            <FaGithub />
-            GitHub
-          </a>
+          {github && (
+            <a
+              href={github}
+              target="_blank"
+              rel="noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl transition"
+            >
+              <FaGithub />
+              GitHub
+            </a>
+          )}
 
-          <a
-            href={live}
-            target="_blank"
-            rel="noreferrer"
-            className="flex-1 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl transition"
-          >
-            <FaExternalLinkAlt />
-            Live Demo
-          </a>
+          {live && live !== "#" && (
+            <a
+              href={live}
+              target="_blank"
+              rel="noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl transition"
+            >
+              <FaExternalLinkAlt />
+              Live Demo
+            </a>
+          )}
 
         </div>
+
 
       </div>
 

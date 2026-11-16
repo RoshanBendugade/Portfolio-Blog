@@ -3,6 +3,8 @@ package com.roshan.portfolio.blog.Service;
 import com.roshan.portfolio.blog.entity.Project;
 import com.roshan.portfolio.blog.Repository.ProjectRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -25,6 +27,10 @@ public class ProjectService {
 
     public void deleteProject(Long id) {
         repository.deleteById(id);
+    }
+
+    public Page<Project> getAllProjects(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public Project updateProject(Long id, Project updatedProject) {

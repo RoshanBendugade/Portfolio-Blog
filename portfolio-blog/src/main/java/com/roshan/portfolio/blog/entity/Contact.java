@@ -1,3 +1,4 @@
+
 package com.roshan.portfolio.blog.entity;
 
 import jakarta.persistence.*;
@@ -5,26 +6,25 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Setter
 @Entity
-    @Table(name = "contacts")
-    public class Contact {
+@Table(name = "contacts")
+public class Contact {
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @Setter
-        private String name;
+    private String name;
 
-        @Setter
-        private String email;
+    private String email;
 
-        @Setter
-        @Column(length = 1000)
-        private String message;
+    @Column(length = 200)
+    private String subject;
 
-        public Contact() {
-        }
+    @Column(length = 1000)
+    private String message;
 
+    public Contact() {
+    }
 }
-
