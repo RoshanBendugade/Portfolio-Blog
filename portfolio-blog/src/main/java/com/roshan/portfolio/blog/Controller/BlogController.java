@@ -1,4 +1,3 @@
-
 package com.roshan.portfolio.blog.Controller;
 
 import com.roshan.portfolio.blog.Service.BlogService;
@@ -35,6 +34,12 @@ public class BlogController {
 
         return blogService.getAllBlogs(pageable)
                 .map(BlogMapper::toResponse);
+    }
+
+    @GetMapping("/{id}")
+    public BlogResponse getBlogById(@PathVariable Long id) {
+
+        return BlogMapper.toResponse(blogService.getBlogById(id));
     }
 
     @PostMapping

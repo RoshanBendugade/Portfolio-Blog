@@ -1,9 +1,13 @@
-
 import { useState } from "react";
+import { FaPaperPlane } from "react-icons/fa";
 
-import Card from "../ui/Card";
-import Button from "../ui/Button";
 import api from "../../services/api";
+
+const inputStyle =
+  "w-full rounded-xl border border-line bg-[var(--bg)] px-4 py-3 outline-none " +
+  "placeholder:text-[var(--muted)] focus:border-[var(--accent)] " +
+  "focus:ring-2 focus:ring-[var(--accent)]/20 transition-colors " +
+  "disabled:cursor-not-allowed disabled:opacity-60";
 
 function ContactForm() {
   const [formData, setFormData] = useState({
@@ -20,15 +24,12 @@ function ContactForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
+    setFormData((prev) => ({ ...prev, [name]: value }));
     setSuccess("");
     setError("");
   };
 
+  // Submit message to Spring Boot backend
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -39,29 +40,21 @@ function ContactForm() {
       setSuccess("");
       setError("");
 
-      const payload = {
+      await api.post("/contact", {
         name: formData.name.trim(),
         email: formData.email.trim(),
         subject: formData.subject.trim(),
         message: formData.message.trim(),
-      };
-
-      await api.post("/contact", payload);
+      });
 
       setSuccess("Your message has been sent successfully!");
-
-      setFormData({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-      });
+      setFormData({ name: "", email: "", subject: "", message: "" });
     } catch (err) {
       console.error("Contact form submission failed:", err);
 
       setError(
         err.response?.data?.message ||
-        "Unable to send your message. Please try again."
+          "Unable to send your message. Please try again."
       );
     } finally {
       setIsSubmitting(false);
@@ -69,76 +62,120 @@ function ContactForm() {
   };
 
   return (
-    <Card>
-      <form onSubmit={handleSubmit} className="space-y-5">
+    <div className="bento h-full p-6 sm:p-8">
+      <h3 className="text-2xl font-bold tracking-tight">Send a message</h3>
 
-        <input
-          type="text"
-          name="name"
-          placeholder="Your Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          disabled={isSubmitting}
-          className="w-full p-4 rounded-xl border dark:bg-slate-900 dark:border-slate-700"
-        />
+      <p className="mt-2 text-muted">
+        Fill out the form and I&rsquo;ll get back to you as soon as possible.
+      </p>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email Address"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          disabled={isSubmitting}
-          className="w-full p-4 rounded-xl border dark:bg-slate-900 dark:border-slate-700"
-        />
+      <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="contact-name" className="mb-2 block text-sm font-semibold">
+              Your name
+            </label>
+            <input
+              id="contact-name"
+              type="text"
+              name="name"
+              placeholder="Enter your name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              disabled={isSubmitting}
+              autoComplete="name"
+              className={inputStyle}
+            />
+          </div>
 
-        <input
-          type="text"
-          name="subject"
-          placeholder="Subject"
-          value={formData.subject}
-          onChange={handleChange}
-          required
-          maxLength={200}
-          disabled={isSubmitting}
-          className="w-full p-4 rounded-xl border dark:bg-slate-900 dark:border-slate-700"
-        />
+          <div>
+            <label htmlFor="contact-email" className="mb-2 block text-sm font-semibold">
+              Email address
+            </label>
+            <input
+              id="contact-email"
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              disabled={isSubmitting}
+              autoComplete="email"
+              className={inputStyle}
+            />
+          </div>
+        </div>
 
-        <textarea
-          rows="6"
-          name="message"
-          placeholder="Write your message..."
-          value={formData.message}
-          onChange={handleChange}
-          required
-          maxLength={1000}
-          disabled={isSubmitting}
-          className="w-full p-4 rounded-xl border resize-none dark:bg-slate-900 dark:border-slate-700"
-        />
+        <div>
+          <label htmlFor="contact-subject" className="mb-2 block text-sm font-semibold">
+            Subject
+          </label>
+          <input
+            id="contact-subject"
+            type="text"
+            name="subject"
+            placeholder="What would you like to discuss?"
+            value={formData.subject}
+            onChange={handleChange}
+            required
+            maxLength={200}
+            disabled={isSubmitting}
+            className={inputStyle}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="contact-message" className="mb-2 block text-sm font-semibold">
+            Your message
+          </label>
+          <textarea
+            id="contact-message"
+            rows={6}
+            name="message"
+            placeholder="Write your message here..."
+            value={formData.message}
+            onChange={handleChange}
+            required
+            maxLength={1000}
+            disabled={isSubmitting}
+            className={`${inputStyle} resize-none`}
+          />
+          <p className="mt-2 text-right text-xs text-muted">
+            {formData.message.length}/1000
+          </p>
+        </div>
 
         {success && (
-          <p className="text-green-600 text-sm font-medium">
+          <div
+            role="status"
+            aria-live="polite"
+            className="rounded-xl border border-green-200 bg-green-50 p-4 text-sm font-medium text-green-700 dark:border-green-900 dark:bg-green-950/40 dark:text-green-300"
+          >
             {success}
-          </p>
+          </div>
         )}
 
         {error && (
-          <p className="text-red-500 text-sm font-medium">
+          <div
+            role="alert"
+            className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-600 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300"
+          >
             {error}
-          </p>
+          </div>
         )}
 
-        <Button
+        <button
           type="submit"
           disabled={isSubmitting}
+          className="btn btn-primary w-full sm:w-auto disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isSubmitting ? "Sending..." : "Send Message"}
-        </Button>
-
+          <FaPaperPlane size={14} />
+          {isSubmitting ? "Sending..." : "Send message"}
+        </button>
       </form>
-    </Card>
+    </div>
   );
 }
 

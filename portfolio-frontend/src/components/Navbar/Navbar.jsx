@@ -1,44 +1,124 @@
-import { FaMoon, FaSun, FaDownload } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaMoon, FaSun, FaDownload, FaBars, FaXmark } from "react-icons/fa6";
 
 import { useTheme } from "../../context/ThemeContext";
-
-import NavLinks from "./NavLinks";
-import Button from "../ui/Button";
-import Container from "../ui/Container";
+import navigation from "../../constants/navigation";
+import resume from "../../assets/resume/Roshan_Bendugade_Resume.pdf";
 
 function Navbar() {
   const { darkMode, toggleTheme } = useTheme();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState("#home");
+
+  // Highlight the link of the section currently in view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(`#${entry.target.id}`);
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+
+    navigation.forEach((item) => {
+      const el = document.getElementById(item.href.slice(1));
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const closeMenu = () => setMenuOpen(false);
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50">
-      <Container>
-        <nav className="mt-5 flex items-center justify-between rounded-2xl border border-gray-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg px-6 py-4 shadow-lg">
+    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-3 sm:px-6">
+      <nav className="mx-auto max-w-6xl">
+        <div className="glass flex items-center justify-between gap-4 rounded-2xl px-4 py-2.5">
           <a
             href="#home"
-            className="text-2xl font-bold text-orange-500"
+            onClick={closeMenu}
+            className="flex shrink-0 items-center gap-2"
           >
-            Roshan.
+            <span className="text-xl font-extrabold tracking-tight">
+              RB<span className="text-accent">.</span>
+            </span>
+            <span className="hidden text-sm font-medium text-muted sm:block">
+              Roshan Bendugade
+            </span>
           </a>
 
-          <NavLinks />
+          <ul className="hidden items-center gap-1 lg:flex">
+            {navigation.map((item) => (
+              <li key={item.id}>
+                <a
+                  href={item.href}
+                  className="nav-link"
+                  data-active={active === item.href}
+                >
+                  {item.title}
+                </a>
+              </li>
+            ))}
+          </ul>
 
-          <div className="flex items-center gap-4">
-            <a href="/resume.pdf">
-              <Button>
-                <FaDownload />
-                <span className="ml-2">Resume</span>
-              </Button>
+          <div className="flex items-center gap-2">
+            <a
+              href={resume}
+              download="Roshan_Bendugade_Resume.pdf"
+              className="btn btn-primary btn-sm hidden sm:inline-flex"
+            >
+              <FaDownload size={12} />
+              Resume
             </a>
 
             <button
               onClick={toggleTheme}
-              className="text-2xl text-orange-500"
+              aria-label="Toggle theme"
+              className="icon-btn"
             >
               {darkMode ? <FaSun /> : <FaMoon />}
             </button>
+
+            <button
+              onClick={() => setMenuOpen((open) => !open)}
+              aria-label="Toggle navigation menu"
+              aria-expanded={menuOpen}
+              className="icon-btn lg:hidden"
+            >
+              {menuOpen ? <FaXmark /> : <FaBars />}
+            </button>
           </div>
-        </nav>
-      </Container>
+        </div>
+
+        {menuOpen && (
+          <div className="glass mt-2 rounded-2xl p-3 lg:hidden">
+            <ul className="flex flex-col gap-1">
+              {navigation.map((item) => (
+                <li key={item.id}>
+                  <a
+                    href={item.href}
+                    onClick={closeMenu}
+                    className="nav-link block"
+                    data-active={active === item.href}
+                  >
+                    {item.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+
+            <a
+              href={resume}
+              download="Roshan_Bendugade_Resume.pdf"
+              className="btn btn-primary mt-3 w-full sm:hidden"
+            >
+              <FaDownload size={12} />
+              Download resume
+            </a>
+          </div>
+        )}
+      </nav>
     </header>
   );
 }

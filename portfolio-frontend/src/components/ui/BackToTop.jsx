@@ -1,50 +1,27 @@
 import { useEffect, useState } from "react";
-import { FaArrowUp } from "react-icons/fa";
+import { FaArrowUp } from "react-icons/fa6";
 
 function BackToTop() {
-  const [showButton, setShowButton] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setShowButton(window.scrollY > 300);
-    };
+    const onScroll = () => setVisible(window.scrollY > 400);
 
-    window.addEventListener("scroll", handleScroll);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
 
-    return () =>
-      window.removeEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
-  if (!showButton) return null;
+  if (!visible) return null;
 
   return (
     <button
-      onClick={scrollToTop}
-      className="
-        fixed
-        bottom-8
-        right-8
-        z-50
-        w-14
-        h-14
-        rounded-full
-        bg-orange-500
-        hover:bg-orange-600
-        text-white
-        shadow-xl
-        transition-all
-        duration-300
-        hover:scale-110
-      "
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      aria-label="Back to top"
+      className="fixed bottom-6 right-6 z-50 grid h-11 w-11 place-items-center rounded-full bg-[var(--fill)] text-white shadow-lg transition-colors hover:bg-[var(--fill-hover)]"
     >
-      <FaArrowUp className="mx-auto" />
+      <FaArrowUp size={14} />
     </button>
   );
 }

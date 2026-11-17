@@ -1,112 +1,78 @@
-import profile from "../../assets/images/profile.png";
-import resume from "../../assets/resume/Roshan_Bendugade_Resume.pdf";
+import { FaGraduationCap, FaLaptopCode, FaCloud } from "react-icons/fa6";
 
-import { FaGraduationCap, FaLaptopCode, FaCloud } from "react-icons/fa";
-
-import Container from "../ui/Container";
-import SectionHeading from "../ui/SectionHeading";
-import Card from "../ui/Card";
-import Button from "../ui/Button";
 import FadeIn from "../ui/FadeIn";
+import SectionHeading from "../ui/SectionHeading";
+
+const highlights = [
+  {
+    icon: FaGraduationCap,
+    label: "Education",
+    title: "B.Tech in Information Technology",
+    text: "Building a strong foundation in software development, computer science and emerging technologies.",
+  },
+  {
+    icon: FaLaptopCode,
+    label: "What I build",
+    title: "Full stack web applications",
+    text: "Complete products using React, Java, Spring Boot and MySQL, from the database to the interface.",
+  },
+  {
+    icon: FaCloud,
+    label: "Where I'm heading",
+    title: "Cloud engineering",
+    text: "Learning backend development, cloud technologies and system design, with Docker and Kubernetes on the list.",
+  },
+];
 
 function About() {
   return (
-    <section
-      id="about"
-      className="py-24 bg-gray-100 dark:bg-[#111827] transition-colors duration-300"
-    >
-      <Container>
-        <SectionHeading
-          subtitle="About Me"
-          title="Know More About Me"
-          description="I'm passionate about building modern, scalable web applications using Java, Spring Boot, React, and cloud technologies."
-        />
+    <section id="about" className="px-4 py-16 sm:px-6 sm:py-24">
+      <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-12 lg:gap-14">
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="lg:col-span-5">
+          <div className="lg:sticky lg:top-28">
+            <SectionHeading eyebrow="About" title="Hi, I'm Roshan." />
 
-          {/* Left Side */}
-
-          <FadeIn direction="left">
-            <div className="flex justify-center">
-              <img
-                src={profile}
-                alt="Profile"
-                className="w-96 rounded-3xl shadow-2xl hover:scale-105 transition duration-500"
-              />
-            </div>
-          </FadeIn>
-
-          {/* Right Side */}
-
-          <FadeIn direction="right" delay={0.2}>
-            <div>
-
-              <h3 className="text-4xl font-bold dark:text-white">
-                Java Full Stack Developer
-              </h3>
-
-              <p className="mt-6 text-lg text-gray-600 dark:text-gray-400 leading-8">
-                I am currently pursuing a B.Tech in Information Technology.
-                I enjoy building scalable full-stack web applications using
-                Java, Spring Boot, React, and MySQL.
+            <div className="-mt-4 space-y-4 leading-8 text-muted">
+              <p>
+                I am pursuing a B.Tech in Information Technology and enjoy
+                building scalable full-stack web applications.
               </p>
-
-              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 leading-8">
-                My goal is to become a Cloud Computing Engineer while
-                continuously improving my skills in backend development,
-                frontend technologies, cloud platforms, and system design.
+              <p>
+                I work with Java, Spring Boot, React and MySQL, and enjoy
+                solving problems through technology.
               </p>
-
-              <div className="grid sm:grid-cols-3 gap-6 mt-10">
-
-                <Card className="text-center">
-                  <FaGraduationCap className="text-4xl text-orange-500 mx-auto mb-4" />
-                  <h4 className="font-bold text-lg dark:text-white">
-                    Education
-                  </h4>
-                  <p className="mt-2 text-gray-500 dark:text-gray-400">
-                    B.Tech IT
-                  </p>
-                </Card>
-
-                <Card className="text-center">
-                  <FaLaptopCode className="text-4xl text-orange-500 mx-auto mb-4" />
-                  <h4 className="font-bold text-lg dark:text-white">
-                    Experience
-                  </h4>
-                  <p className="mt-2 text-gray-500 dark:text-gray-400">
-                    Full Stack Projects
-                  </p>
-                </Card>
-
-                <Card className="text-center">
-                  <FaCloud className="text-4xl text-orange-500 mx-auto mb-4" />
-                  <h4 className="font-bold text-lg dark:text-white">
-                    Goal
-                  </h4>
-                  <p className="mt-2 text-gray-500 dark:text-gray-400">
-                    Cloud Engineer
-                  </p>
-                </Card>
-
-              </div>
-
-              <div className="mt-10">
-                <a
-                  href={resume}
-                  download="Roshan_Bendugade_Resume.pdf"
-                >
-                  <Button>
-                    Download Resume
-                  </Button>
-                </a>
-              </div>
-
             </div>
-          </FadeIn>
-
+          </div>
         </div>
-      </Container>
+
+        <div className="lg:col-span-7">
+          <FadeIn>
+            <div className="bento divided h-full overflow-hidden">
+              {highlights.map((item) => {
+                const Icon = item.icon;
+
+                return (
+                  <div key={item.label} className="flex gap-4 p-6 sm:p-7">
+                    <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[var(--soft)] text-accent">
+                      <Icon size={18} />
+                    </div>
+
+                    <div>
+                      <p className="text-sm text-muted">{item.label}</p>
+                      <h3 className="mt-0.5 text-lg font-semibold">
+                        {item.title}
+                      </h3>
+                      <p className="mt-2 leading-7 text-muted">{item.text}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </FadeIn>
+        </div>
+
+      </div>
     </section>
   );
 }

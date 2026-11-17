@@ -1,52 +1,25 @@
-import {
-  FaJava,
-  FaReact,
-  FaGitAlt,
-} from "react-icons/fa";
-
-import {
-  SiSpringboot,
-  SiMysql,
-  SiTailwindcss,
-} from "react-icons/si";
+import { FaJava, FaReact, FaGitAlt } from "react-icons/fa";
+import { SiSpringboot, SiMysql, SiTailwindcss } from "react-icons/si";
 
 const skills = [
-  {
-    name: "Java",
-    icon: FaJava,
-    color: "text-orange-500",
-    level: 90,
-  },
-  {
-    name: "Spring Boot",
-    icon: SiSpringboot,
-    color: "text-green-500",
-    level: 85,
-  },
-  {
-    name: "React",
-    icon: FaReact,
-    color: "text-cyan-500",
-    level: 85,
-  },
-  {
-    name: "MySQL",
-    icon: SiMysql,
-    color: "text-blue-500",
-    level: 80,
-  },
-  {
-    name: "Tailwind CSS",
-    icon: SiTailwindcss,
-    color: "text-sky-500",
-    level: 85,
-  },
-  {
-    name: "Git",
-    icon: FaGitAlt,
-    color: "text-red-500",
-    level: 80,
-  },
+  { name: "Java", icon: FaJava, group: "Backend" },
+  { name: "Spring Boot", icon: SiSpringboot, group: "Backend" },
+  { name: "MySQL", icon: SiMysql, group: "Backend" },
+  { name: "React", icon: FaReact, group: "Frontend" },
+  { name: "Tailwind CSS", icon: SiTailwindcss, group: "Frontend" },
+  { name: "Git", icon: FaGitAlt, group: "Tools" },
+];
+
+export const skillGroups = ["Backend", "Frontend", "Tools"].map((title) => ({
+  title,
+  items: skills.filter((skill) => skill.group === title),
+}));
+
+export const exploring = [
+  "Docker",
+  "Kubernetes",
+  "Cloud computing",
+  "System design",
 ];
 
 export default skills;

@@ -1,4 +1,3 @@
-
 import { AlertCircle, FolderOpen, RefreshCw } from "lucide-react";
 
 function AsyncState({
@@ -13,23 +12,17 @@ function AsyncState({
   if (loading) {
     return (
       <div
-        className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+        className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
         aria-label="Loading content"
         aria-busy="true"
       >
         {[1, 2, 3].map((item) => (
-          <div
-            key={item}
-            className="rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-sm border border-gray-200 dark:border-slate-800 animate-pulse"
-          >
-            <div className="h-48 bg-gray-200 dark:bg-slate-800" />
-
-            <div className="p-6 space-y-4">
-              <div className="h-4 w-1/3 rounded bg-gray-200 dark:bg-slate-800" />
-              <div className="h-6 w-4/5 rounded bg-gray-200 dark:bg-slate-800" />
-              <div className="h-3 w-full rounded bg-gray-200 dark:bg-slate-800" />
-              <div className="h-3 w-2/3 rounded bg-gray-200 dark:bg-slate-800" />
-              <div className="h-9 w-1/3 rounded bg-gray-200 dark:bg-slate-800" />
+          <div key={item} className="bento animate-pulse overflow-hidden">
+            <div className="h-44 bg-[var(--soft)]" />
+            <div className="space-y-3 p-5">
+              <div className="h-5 w-3/5 rounded bg-[var(--soft)]" />
+              <div className="h-3 w-full rounded bg-[var(--soft)]" />
+              <div className="h-3 w-4/5 rounded bg-[var(--soft)]" />
             </div>
           </div>
         ))}
@@ -41,27 +34,17 @@ function AsyncState({
     return (
       <div
         role="alert"
-        className="flex flex-col items-center text-center py-12 px-6 rounded-2xl border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/20"
+        className="bento flex flex-col items-center px-6 py-12 text-center"
       >
-        <AlertCircle
-          size={42}
-          className="text-red-500 mb-4"
-        />
+        <AlertCircle size={36} className="text-red-500" />
 
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-          Something went wrong
-        </h3>
+        <h3 className="mt-4 text-lg font-semibold">Something went wrong</h3>
 
-        <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-md">
-          {error}
-        </p>
+        <p className="mt-2 max-w-md text-muted">{error}</p>
 
-        <button
-          onClick={onRetry}
-          className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white font-medium transition-colors"
-        >
-          <RefreshCw size={17} />
-          Try Again
+        <button onClick={onRetry} className="btn btn-primary mt-6">
+          <RefreshCw size={16} />
+          Try again
         </button>
       </div>
     );
@@ -69,21 +52,14 @@ function AsyncState({
 
   if (isEmpty) {
     return (
-      <div className="flex flex-col items-center text-center py-14 px-6 rounded-2xl border border-dashed border-gray-300 dark:border-slate-700">
-        <div className="p-4 rounded-full bg-gray-100 dark:bg-slate-800 mb-4">
-          <FolderOpen
-            size={36}
-            className="text-gray-500 dark:text-gray-400"
-          />
+      <div className="bento flex flex-col items-center border-dashed px-6 py-12 text-center">
+        <div className="grid h-14 w-14 place-items-center rounded-2xl bg-[var(--soft)] text-accent">
+          <FolderOpen size={26} />
         </div>
 
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-          {emptyTitle}
-        </h3>
+        <h3 className="mt-4 text-lg font-semibold">{emptyTitle}</h3>
 
-        <p className="text-gray-500 dark:text-gray-400 mt-2 max-w-md">
-          {emptyDescription}
-        </p>
+        <p className="mt-2 max-w-md text-muted">{emptyDescription}</p>
       </div>
     );
   }

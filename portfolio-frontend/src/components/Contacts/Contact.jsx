@@ -1,134 +1,84 @@
-import {
-  FaEnvelope,
-  FaPhoneAlt,
-  FaMapMarkerAlt,
-  FaGithub,
-  FaLinkedin,
-} from "react-icons/fa";
+import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
 
-import Container from "../ui/Container";
+import socialLinks from "../../constants/socialLinks";
+import FadeIn from "../ui/FadeIn";
 import SectionHeading from "../ui/SectionHeading";
-import Card from "../ui/Card";
 import ContactForm from "./ContactForm";
+
+// Edit your real details here
+const contactInfo = [
+  { icon: FaEnvelope, label: "Email", value: "roshan@example.com" },
+  { icon: FaPhoneAlt, label: "Phone", value: "+91 XXXXX XXXXX" },
+  { icon: FaMapMarkerAlt, label: "Location", value: "Raigad, Maharashtra, India" },
+];
 
 function Contact() {
   return (
-    <section
-      id="contact"
-      className="py-24 bg-gray-100 dark:bg-[#111827] transition-colors duration-300"
-    >
-      <Container>
+    <section id="contact" className="px-4 py-16 sm:px-6 sm:py-24">
+      <div className="mx-auto max-w-6xl">
         <SectionHeading
-          subtitle="Contact"
-          title="Let's Work Together"
-          description="Feel free to contact me for internships, freelance work, or collaboration."
+          eyebrow="Contact"
+          title="Let's work together"
+          description="Have a project idea, an internship opportunity, or just want to connect? I'd love to hear from you."
         />
 
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid gap-4 lg:grid-cols-5">
 
-          {/* Left */}
+          <FadeIn className="lg:col-span-2">
+            <div className="bento-soft flex h-full flex-col p-6 sm:p-8">
+              <ul className="space-y-5">
+                {contactInfo.map((item) => {
+                  const Icon = item.icon;
 
-          <div className="space-y-6">
+                  return (
+                    <li key={item.label} className="flex items-center gap-4">
+                      <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[var(--card)] text-accent">
+                        <Icon size={17} />
+                      </div>
 
-            <Card>
+                      <div className="min-w-0">
+                        <p className="text-sm text-muted">{item.label}</p>
+                        <p className="break-all font-medium">{item.value}</p>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
 
-              <div className="flex items-center gap-5">
+              <div className="mt-auto pt-8">
+                <p className="mb-3 text-sm font-semibold text-muted">
+                  Find me online
+                </p>
 
-                <div className="w-14 h-14 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center">
-                  <FaEnvelope className="text-orange-500 text-xl" />
+                <div className="flex flex-wrap gap-2">
+                  {socialLinks.map((item) => {
+                    const Icon = item.icon;
+
+                    return (
+                      <a
+                        key={item.id}
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={item.name}
+                        title={item.name}
+                        className="icon-btn"
+                      >
+                        <Icon size={17} />
+                      </a>
+                    );
+                  })}
                 </div>
-
-                <div>
-                  <h3 className="font-bold text-lg dark:text-white">
-                    Email
-                  </h3>
-
-                  <p className="text-gray-500 dark:text-gray-400">
-                    roshan@example.com
-                  </p>
-                </div>
-
               </div>
-
-            </Card>
-
-            <Card>
-
-              <div className="flex items-center gap-5">
-
-                <div className="w-14 h-14 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center">
-                  <FaPhoneAlt className="text-orange-500 text-xl" />
-                </div>
-
-                <div>
-                  <h3 className="font-bold text-lg dark:text-white">
-                    Phone
-                  </h3>
-
-                  <p className="text-gray-500 dark:text-gray-400">
-                    +91 XXXXX XXXXX
-                  </p>
-                </div>
-
-              </div>
-
-            </Card>
-
-            <Card>
-
-              <div className="flex items-center gap-5">
-
-                <div className="w-14 h-14 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center">
-                  <FaMapMarkerAlt className="text-orange-500 text-xl" />
-                </div>
-
-                <div>
-                  <h3 className="font-bold text-lg dark:text-white">
-                    Location
-                  </h3>
-
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Raigad, Maharashtra, India
-                  </p>
-                </div>
-
-              </div>
-
-            </Card>
-
-            {/* Social */}
-
-            <div className="flex gap-4 mt-8">
-
-              <a
-                href="https://github.com/"
-                target="_blank"
-                rel="noreferrer"
-                className="w-12 h-12 rounded-full bg-slate-900 hover:bg-orange-500 flex justify-center items-center transition"
-              >
-                <FaGithub className="text-white text-xl" />
-              </a>
-
-              <a
-                href="https://linkedin.com/"
-                target="_blank"
-                rel="noreferrer"
-                className="w-12 h-12 rounded-full bg-blue-700 hover:bg-orange-500 flex justify-center items-center transition"
-              >
-                <FaLinkedin className="text-white text-xl" />
-              </a>
-
             </div>
+          </FadeIn>
 
-          </div>
-
-          {/* Right */}
-
-          <ContactForm />
+          <FadeIn delay={0.1} className="lg:col-span-3">
+            <ContactForm />
+          </FadeIn>
 
         </div>
-
-      </Container>
+      </div>
     </section>
   );
 }

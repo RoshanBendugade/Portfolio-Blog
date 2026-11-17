@@ -1,11 +1,9 @@
-
 import { useCallback, useEffect, useState } from "react";
 
-import Container from "../ui/Container";
-import SectionHeading from "../ui/SectionHeading";
 import FadeIn from "../ui/FadeIn";
-import ProjectCard from "./ProjectCard";
+import SectionHeading from "../ui/SectionHeading";
 import AsyncState from "../ui/AsyncState";
+import ProjectCard from "./ProjectCard";
 
 import api from "../../services/api";
 
@@ -14,6 +12,7 @@ function Projects() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Fetch projects from Spring Boot API
   const fetchProjects = useCallback(async () => {
     try {
       setLoading(true);
@@ -23,14 +22,14 @@ function Projects() {
 
       const data = Array.isArray(response.data)
         ? response.data
-        : response.data?.content ||
-          response.data?.projects ||
-          [];
+        : response.data?.content || response.data?.projects || [];
 
       setProjects(data);
     } catch (err) {
       console.error("Error fetching projects:", err);
-      setError("Unable to load projects. Please check your connection and try again.");
+      setError(
+        "Unable to load projects. Please check your connection and try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -41,15 +40,12 @@ function Projects() {
   }, [fetchProjects]);
 
   return (
-    <section
-      id="projects"
-      className="py-24 bg-gray-100 dark:bg-[#111827] transition-colors duration-300"
-    >
-      <Container>
+    <section id="projects" className="px-4 py-16 sm:px-6 sm:py-24">
+      <div className="mx-auto max-w-6xl">
         <SectionHeading
-          subtitle="Projects"
-          title="My Recent Work"
-          description="Here are some of my recent projects built using Java, Spring Boot, React and MySQL."
+          eyebrow="Projects"
+          title="Things I've built"
+          description="A selection of applications and solutions built with modern technologies."
         />
 
         <AsyncState
@@ -57,10 +53,10 @@ function Projects() {
           error={error}
           isEmpty={projects.length === 0}
           onRetry={fetchProjects}
-          emptyTitle="No Projects Yet"
-          emptyDescription="I'm currently working on exciting projects. Check back soon to explore my work."
+          emptyTitle="No projects yet"
+          emptyDescription="I'm working on new projects. Check back soon."
         >
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {projects.map((project, index) => {
               const technologies = Array.isArray(project.technologies)
                 ? project.technologies
@@ -70,12 +66,9 @@ function Projects() {
                     .filter(Boolean);
 
               return (
-                <FadeIn
-                  key={project.id}
-                  delay={index * 0.15}
-                >
+                <FadeIn key={project.id} delay={Math.min(index, 3) * 0.08}>
                   <ProjectCard
-                    image={project.imageUrl || "/portfolio.png"}
+                    image={project.imageUrl}
                     title={project.title}
                     description={project.description}
                     technologies={technologies}
@@ -87,7 +80,7 @@ function Projects() {
             })}
           </div>
         </AsyncState>
-      </Container>
+      </div>
     </section>
   );
 }

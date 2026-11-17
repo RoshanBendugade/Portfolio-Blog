@@ -1,86 +1,84 @@
-import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
+import { useState } from "react";
+import { FaGithub, FaArrowUpRightFromSquare } from "react-icons/fa6";
 
 function ProjectCard({
   image,
   title,
   description,
-  technologies,
+  technologies = [],
   github,
   live,
 }) {
+  const [imageFailed, setImageFailed] = useState(false);
+  const hasLive = live && live !== "#";
+  const showImage = image && !imageFailed;
+
   return (
-    <div className="group overflow-hidden rounded-3xl bg-white dark:bg-slate-900 shadow-lg hover:shadow-orange-500/20 transition-all duration-500 hover:-translate-y-3">
-
+    <article className="bento lift group flex h-full flex-col overflow-hidden">
       {/* Image */}
-
-      <div className="overflow-hidden h-60">
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-        />
+      <div className="h-44 shrink-0 overflow-hidden bg-[var(--soft)]">
+        {showImage ? (
+          <img
+            src={image}
+            alt={title}
+            loading="lazy"
+            onError={() => setImageFailed(true)}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="grid h-full w-full place-items-center text-4xl font-bold text-accent">
+            {title?.charAt(0)?.toUpperCase()}
+          </div>
+        )}
       </div>
 
-      {/* Content */}
+      {/* Details */}
+      <div className="flex flex-1 flex-col p-5">
+        <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
 
-      <div className="p-6">
-
-        <h3 className="text-2xl font-bold dark:text-white">
-          {title}
-        </h3>
-
-        <p className="mt-4 text-gray-600 dark:text-gray-400 leading-7">
+        <p className="mt-2 line-clamp-3 text-sm leading-6 text-muted">
           {description}
         </p>
 
-        {/* Technologies */}
+        {technologies.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {technologies.map((tech) => (
+              <span key={tech} className="chip !px-2.5 !py-0.5 !text-xs">
+                {tech}
+              </span>
+            ))}
+          </div>
+        )}
 
-        <div className="flex flex-wrap gap-2 mt-6">
-          {technologies.map((tech) => (
-            <span
-              key={tech}
-              className="px-3 py-1 rounded-full bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-300 text-sm"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
+        {(github || hasLive) && (
+          <div className="mt-auto flex flex-wrap gap-2 pt-5">
+            {github && (
+              <a
+                href={github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-ghost btn-sm"
+              >
+                <FaGithub size={14} />
+                Code
+              </a>
+            )}
 
-
-        {/* Buttons */}
-
-        <div className="flex gap-4 mt-8">
-
-          {github && (
-            <a
-              href={github}
-              target="_blank"
-              rel="noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl transition"
-            >
-              <FaGithub />
-              GitHub
-            </a>
-          )}
-
-          {live && live !== "#" && (
-            <a
-              href={live}
-              target="_blank"
-              rel="noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl transition"
-            >
-              <FaExternalLinkAlt />
-              Live Demo
-            </a>
-          )}
-
-        </div>
-
-
+            {hasLive && (
+              <a
+                href={live}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary btn-sm"
+              >
+                Live demo
+                <FaArrowUpRightFromSquare size={11} />
+              </a>
+            )}
+          </div>
+        )}
       </div>
-
-    </div>
+    </article>
   );
 }
 

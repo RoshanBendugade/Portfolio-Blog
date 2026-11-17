@@ -1,58 +1,59 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { FaArrowRight } from "react-icons/fa6";
 
-function BlogCard({
-  image,
-  title,
-  description,
-  category,
-  author,
-  readTime,
-}) {
+function BlogCard({ id, image, title, description, category, author, readTime }) {
+  const [imageFailed, setImageFailed] = useState(false);
+
   return (
-    <div className="group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-lg hover:shadow-orange-500/20 transition duration-500 hover:-translate-y-2">
+    <article>
+      <Link
+        to={`/blog/${id}`}
+        className="group flex items-start gap-5 p-5 transition-colors hover:bg-[var(--soft)] sm:p-6"
+      >
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+            <span className="font-semibold text-accent">
+              {category || "General"}
+            </span>
 
-      {/* Blog Image */}
-      <div className="overflow-hidden h-56">
-        <img
-          src={image || "/portfolio.png"}
-          alt={title || "Blog image"}
-          onError={(e) => {
-            e.currentTarget.onerror = null;
-            e.currentTarget.src = "/portfolio.png";
-          }}
-          className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
-        />
-      </div>
+            {readTime && (
+              <span className="text-muted">{readTime} min read</span>
+            )}
+          </div>
 
-      <div className="p-6">
+          <h3 className="mt-2 text-xl font-bold tracking-tight transition-colors group-hover:text-accent">
+            {title}
+          </h3>
 
-        {/* Category and Reading Time */}
-        <div className="flex justify-between items-center gap-2 text-sm text-orange-500">
-          <span>{category || "General"}</span>
+          <p className="mt-2 line-clamp-2 whitespace-pre-line leading-7 text-muted">
+            {description || "No description available."}
+          </p>
 
-          {readTime && (
-            <span>{readTime} min read</span>
-          )}
+          <div className="mt-3 flex items-center gap-3 text-sm">
+            {author && <span className="text-muted">By {author}</span>}
+
+            <span className="inline-flex items-center gap-1.5 font-semibold text-accent">
+              Read article
+              <FaArrowRight
+                size={11}
+                className="transition-transform group-hover:translate-x-1"
+              />
+            </span>
+          </div>
         </div>
 
-        {/* Title */}
-        <h3 className="mt-4 text-2xl font-bold dark:text-white">
-          {title}
-        </h3>
-
-        {/* Description */}
-        <p className="mt-4 text-gray-600 dark:text-gray-400 leading-7 line-clamp-4 whitespace-pre-line">
-          {description || "No description available."}
-        </p>
-
-        {/* Author */}
-        {author && (
-          <p className="mt-6 text-sm text-gray-500 dark:text-gray-400">
-            Written by <span className="font-semibold text-orange-500">{author}</span>
-          </p>
+        {image && !imageFailed && (
+          <img
+            src={image}
+            alt={title || "Blog image"}
+            loading="lazy"
+            onError={() => setImageFailed(true)}
+            className="hidden h-24 w-36 shrink-0 rounded-xl object-cover sm:block"
+          />
         )}
-
-      </div>
-    </div>
+      </Link>
+    </article>
   );
 }
 

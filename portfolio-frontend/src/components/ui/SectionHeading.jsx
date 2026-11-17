@@ -1,25 +1,16 @@
-function SectionHeading({
-  subtitle,
-  title,
-  description,
-  center = true,
-}) {
+function SectionHeading({ eyebrow, title, description }) {
   return (
-    <div className={`${center ? "text-center" : ""} mb-16`}>
-      {subtitle && (
-        <p className="uppercase tracking-[0.3em] text-orange-500 font-semibold mb-3">
-          {subtitle}
-        </p>
+    <div className="mb-10 max-w-2xl">
+      {eyebrow && (
+        <p className="text-sm font-semibold text-accent">{eyebrow}</p>
       )}
 
-      <h2 className="text-4xl md:text-5xl font-bold dark:text-white">
+      <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
         {title}
       </h2>
 
       {description && (
-        <p className="mt-5 max-w-2xl mx-auto text-gray-600 dark:text-gray-400">
-          {description}
-        </p>
+        <p className="mt-3 leading-7 text-muted">{description}</p>
       )}
     </div>
   );

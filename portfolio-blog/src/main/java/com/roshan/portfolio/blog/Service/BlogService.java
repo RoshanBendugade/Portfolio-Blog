@@ -2,9 +2,11 @@ package com.roshan.portfolio.blog.Service;
 
 import com.roshan.portfolio.blog.Repository.BlogRepository;
 import com.roshan.portfolio.blog.entity.Blog;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -19,6 +21,12 @@ public class BlogService {
 
     public List<Blog> getAllBlogs() {
         return repository.findAll();
+    }
+
+    public Blog getBlogById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Blog not found"));
     }
 
     public Blog saveBlog(Blog blog) {

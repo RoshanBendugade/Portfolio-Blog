@@ -1,122 +1,54 @@
-import {
-  FaGithub,
-  FaLinkedin,
-  FaInstagram,
-  FaArrowUp,
-} from "react-icons/fa";
-
-import Container from "../ui/Container";
 import navigation from "../../constants/navigation";
 import socialLinks from "../../constants/socialLinks";
 
 function Footer() {
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
   return (
-    <footer className="bg-slate-950 text-gray-300">
+    <footer className="px-4 pb-8 pt-4 sm:px-6">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-5 border-t border-line pt-6 text-sm md:flex-row">
 
-      <Container>
-
-        <div className="grid md:grid-cols-3 gap-12 py-16">
-
-          {/* Left */}
-
-          <div>
-
-            <h2 className="text-3xl font-bold text-white">
-              Roshan
-              <span className="text-orange-500">.</span>
-            </h2>
-
-            <p className="mt-5 leading-8 text-gray-400">
-              Passionate Java Full Stack Developer focused on building
-              scalable, responsive and modern web applications using
-              Spring Boot, React and MySQL.
-            </p>
-
-          </div>
-
-          {/* Quick Links */}
-
-          <div>
-
-            <h3 className="text-xl font-semibold text-white mb-6">
-              Quick Links
-            </h3>
-
-            <ul className="space-y-3">
-
-              {navigation.map((item) => (
-                <li key={item.id}>
-                  <a
-                    href={item.href}
-                    className="hover:text-orange-500 transition"
-                  >
-                    {item.name}
-                  </a>
-                </li>
-              ))}
-
-            </ul>
-
-          </div>
-
-          {/* Social */}
-
-          <div>
-
-            <h3 className="text-xl font-semibold text-white mb-6">
-              Connect
-            </h3>
-
-            <div className="flex gap-4">
-
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-
-                return (
-                  <a
-                    key={social.id}
-                    href={social.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="w-12 h-12 rounded-full bg-slate-800 hover:bg-orange-500 transition flex items-center justify-center"
-                  >
-                    <Icon className="text-white text-xl" />
-                  </a>
-                );
-              })}
-
-            </div>
-
-          </div>
-
-        </div>
-
-        {/* Bottom */}
-
-        <div className="border-t border-slate-800 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
-
-          <p className="text-gray-500 text-center">
-            © {new Date().getFullYear()} Roshan Bendugade. All Rights Reserved.
+        <div className="flex items-center gap-3">
+          <a href="#home" className="text-lg font-extrabold tracking-tight">
+            RB<span className="text-accent">.</span>
+          </a>
+          <p className="text-muted">
+            &copy; {new Date().getFullYear()} Roshan Bendugade
           </p>
-
-          <button
-            onClick={scrollToTop}
-            className="w-12 h-12 rounded-full bg-orange-500 hover:bg-orange-600 transition flex items-center justify-center"
-          >
-            <FaArrowUp className="text-white" />
-          </button>
-
         </div>
 
-      </Container>
+        <ul className="flex flex-wrap justify-center gap-x-5 gap-y-2">
+          {navigation.map((item) => (
+            <li key={item.id}>
+              <a
+                href={item.href}
+                className="text-muted transition-colors hover:text-[var(--accent)]"
+              >
+                {item.title}
+              </a>
+            </li>
+          ))}
+        </ul>
 
+        <div className="flex items-center gap-2">
+          {socialLinks.map((item) => {
+            const Icon = item.icon;
+
+            return (
+              <a
+                key={item.id}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={item.name}
+                title={item.name}
+                className="icon-btn"
+              >
+                <Icon size={16} />
+              </a>
+            );
+          })}
+        </div>
+
+      </div>
     </footer>
   );
 }
