@@ -1,8 +1,12 @@
-
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { LockKeyhole, Mail, ShieldCheck } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowLeft, LockKeyhole, Mail, ShieldCheck } from "lucide-react";
 import api from "../../services/api";
+
+const fieldWrapper =
+  "flex items-center gap-3 rounded-xl border border-line bg-[var(--bg)] px-3 " +
+  "transition-colors focus-within:border-[var(--accent)] focus-within:ring-2 " +
+  "focus-within:ring-[var(--accent)]/20";
 
 function Login() {
   const navigate = useNavigate();
@@ -40,7 +44,7 @@ function Login() {
     } catch (err) {
       setError(
         err.response?.data?.message ||
-        "Login failed. Please check your credentials."
+          "Login failed. Please check your credentials."
       );
       console.error("Login error:", err);
     } finally {
@@ -49,40 +53,38 @@ function Login() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-slate-950 px-4 py-8">
+    <main className="grid min-h-screen place-items-center px-4 py-8">
       <div className="w-full max-w-md">
-        <form
-          onSubmit={handleLogin}
-          className="w-full rounded-2xl border border-slate-700 bg-slate-900 p-6 shadow-2xl sm:p-8 md:p-10"
-        >
+        <form onSubmit={handleLogin} className="bento p-6 sm:p-10">
           <div className="mb-8 text-center">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-500/10 text-orange-500">
-              <ShieldCheck size={30} />
+            <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-[var(--soft)] text-accent">
+              <ShieldCheck size={28} />
             </div>
 
-            <h1 className="text-2xl font-bold text-white sm:text-3xl">
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
               Admin Login
             </h1>
 
-            <p className="mt-2 text-sm text-slate-400">
+            <p className="mt-2 text-sm text-muted">
               Sign in to manage your portfolio
             </p>
           </div>
 
           <div className="mb-5">
-            <label className="mb-2 block text-sm font-medium text-slate-300">
-              Email Address
+            <label htmlFor="admin-email" className="mb-2 block text-sm font-semibold">
+              Email address
             </label>
 
-            <div className="flex items-center gap-3 rounded-lg border border-slate-700 bg-slate-800 px-3 focus-within:border-orange-500">
-              <Mail size={19} className="shrink-0 text-slate-400" />
+            <div className={fieldWrapper}>
+              <Mail size={18} className="shrink-0 text-muted" />
 
               <input
+                id="admin-email"
                 type="email"
                 placeholder="Enter your email"
                 required
                 autoComplete="username"
-                className="w-full min-w-0 bg-transparent py-3 text-white outline-none placeholder:text-slate-500"
+                className="w-full min-w-0 bg-transparent py-3 outline-none placeholder:text-[var(--muted)]"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -90,19 +92,20 @@ function Login() {
           </div>
 
           <div className="mb-6">
-            <label className="mb-2 block text-sm font-medium text-slate-300">
+            <label htmlFor="admin-password" className="mb-2 block text-sm font-semibold">
               Password
             </label>
 
-            <div className="flex items-center gap-3 rounded-lg border border-slate-700 bg-slate-800 px-3 focus-within:border-orange-500">
-              <LockKeyhole size={19} className="shrink-0 text-slate-400" />
+            <div className={fieldWrapper}>
+              <LockKeyhole size={18} className="shrink-0 text-muted" />
 
               <input
+                id="admin-password"
                 type="password"
                 placeholder="Enter your password"
                 required
                 autoComplete="current-password"
-                className="w-full min-w-0 bg-transparent py-3 text-white outline-none placeholder:text-slate-500"
+                className="w-full min-w-0 bg-transparent py-3 outline-none placeholder:text-[var(--muted)]"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -112,7 +115,7 @@ function Login() {
           {error && (
             <p
               role="alert"
-              className="mb-5 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-400"
+              className="mb-5 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-medium text-red-600 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300"
             >
               {error}
             </p>
@@ -121,14 +124,18 @@ function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-orange-500 py-3 font-semibold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
+            className="btn btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? "Logging in..." : "Sign In"}
+            {loading ? "Logging in..." : "Sign in"}
           </button>
 
-          <p className="mt-6 text-center text-xs text-slate-500">
-            Secure portfolio administration
-          </p>
+          <Link
+            to="/"
+            className="mt-6 flex items-center justify-center gap-2 text-sm text-muted transition-colors hover:text-[var(--accent)]"
+          >
+            <ArrowLeft size={14} />
+            Back to portfolio
+          </Link>
         </form>
       </div>
     </main>

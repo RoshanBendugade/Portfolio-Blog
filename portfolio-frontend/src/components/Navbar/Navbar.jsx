@@ -43,7 +43,7 @@ function Navbar() {
             <span className="text-xl font-extrabold tracking-tight">
               RB<span className="text-accent">.</span>
             </span>
-            <span className="hidden text-sm font-medium text-muted sm:block">
+            <span className="hidden text-sm font-medium text-muted xl:block">
               Roshan Bendugade
             </span>
           </a>

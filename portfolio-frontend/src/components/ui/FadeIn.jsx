@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 const offsets = {
   up: { y: 24 },
@@ -14,6 +14,13 @@ function FadeIn({
   duration = 0.5,
   className = "",
 }) {
+  const reduceMotion = useReducedMotion();
+
+  // Respect the visitor's "reduce motion" system setting
+  if (reduceMotion) {
+    return <div className={`h-full ${className}`}>{children}</div>;
+  }
+
   return (
     <motion.div
       className={`h-full ${className}`}

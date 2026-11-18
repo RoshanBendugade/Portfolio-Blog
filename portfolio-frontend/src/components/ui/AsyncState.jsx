@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { AlertCircle, FolderOpen, RefreshCw } from "lucide-react";
 
 function AsyncState({
@@ -9,23 +10,41 @@ function AsyncState({
   emptyDescription = "Content will appear here once it becomes available.",
   children,
 }) {
+  const [slow, setSlow] = useState(false);
+
+  // Free hosting can take up to a minute to wake up, so tell the visitor why
+  useEffect(() => {
+    if (!loading) return;
+
+    const timer = setTimeout(() => setSlow(true), 5000);
+
+    return () => {
+      clearTimeout(timer);
+      setSlow(false);
+    };
+  }, [loading]);
+
   if (loading) {
     return (
-      <div
-        className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
-        aria-label="Loading content"
-        aria-busy="true"
-      >
-        {[1, 2, 3].map((item) => (
-          <div key={item} className="bento animate-pulse overflow-hidden">
-            <div className="h-44 bg-[var(--soft)]" />
-            <div className="space-y-3 p-5">
-              <div className="h-5 w-3/5 rounded bg-[var(--soft)]" />
-              <div className="h-3 w-full rounded bg-[var(--soft)]" />
-              <div className="h-3 w-4/5 rounded bg-[var(--soft)]" />
+      <div aria-label="Loading content" aria-busy="true">
+        {slow && (
+          <p role="status" className="mb-4 text-sm text-muted">
+            Waking up the server. This can take up to a minute the first time.
+          </p>
+        )}
+
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3].map((item) => (
+            <div key={item} className="bento animate-pulse overflow-hidden">
+              <div className="h-44 bg-[var(--soft)]" />
+              <div className="space-y-3 p-5">
+                <div className="h-5 w-3/5 rounded bg-[var(--soft)]" />
+                <div className="h-3 w-full rounded bg-[var(--soft)]" />
+                <div className="h-3 w-4/5 rounded bg-[var(--soft)]" />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     );
   }

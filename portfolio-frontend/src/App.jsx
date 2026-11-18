@@ -13,6 +13,7 @@ import Contact from "./components/Contacts/Contact";
 import Footer from "./components/Footer/Footer";
 import BackToTop from "./components/ui/BackToTop";
 import NotFound from "./Pages/NotFound";
+import Experience from "./components/Experience/Experience";
 
 // Authentication
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -57,6 +58,7 @@ function Home() {
         <Hero />
         <About />
         <Skills />
+        <Experience />
         <Projects />
         <Blogs />
         <Contact />
