@@ -1,3 +1,4 @@
+
 import axios from "axios";
 
 const API_BASE_URL = (
@@ -7,7 +8,8 @@ const API_BASE_URL = (
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  // Render's free plan can take up to ~1 minute to wake up after being idle
+
+  // Render's free plan can take time to wake up
   timeout: 70000,
 });
 
